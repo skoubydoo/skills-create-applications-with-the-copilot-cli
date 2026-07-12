@@ -65,6 +65,10 @@ const operations = {
 
 function calculate(left, operation, right) {
   if (operation === 'sqrt') {
+    if (right !== undefined) {
+      throw new TypeError('Square root only accepts one operand.');
+    }
+
     return squareRoot(left);
   }
 
@@ -90,7 +94,7 @@ function runCli() {
     (!isSqrtOperation && (!rightInput || process.argv.length !== 5))
   ) {
     console.error(
-      'Usage: node src/calculator.js <number> <+|-|*|/|%|^> <number> OR node src/calculator.js <number> sqrt'
+      'Usage: node src/calculator.js <number> <operation> [number] (operations: +, -, *, /, %, ^, sqrt)'
     );
     process.exitCode = 1;
     return;

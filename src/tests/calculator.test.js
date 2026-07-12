@@ -123,6 +123,10 @@ test('rejects invalid operands and operations', () => {
     name: 'TypeError',
     message: 'The operand must be a valid number.',
   });
+  assert.throws(() => calculate(9, 'sqrt', 3), {
+    name: 'TypeError',
+    message: 'Square root only accepts one operand.',
+  });
   assert.throws(() => calculate(-1, 'sqrt'), {
     name: 'RangeError',
     message: 'Cannot calculate the square root of a negative number.',
