@@ -65,10 +65,6 @@ const operations = {
 
 function calculate(left, operation, right) {
   if (operation === 'sqrt') {
-    if (!Number.isFinite(left)) {
-      throw new TypeError('The operand must be a valid number.');
-    }
-
     return squareRoot(left);
   }
 
@@ -86,12 +82,12 @@ function calculate(left, operation, right) {
 
 function runCli() {
   const [leftInput, operation, rightInput] = process.argv.slice(2);
-  const isSquareRootOperation = operation === 'sqrt' && process.argv.length === 4;
+  const isSqrtOperation = operation === 'sqrt' && process.argv.length === 4;
 
   if (
     !leftInput ||
     !operation ||
-    (!isSquareRootOperation && (!rightInput || process.argv.length !== 5))
+    (!isSqrtOperation && (!rightInput || process.argv.length !== 5))
   ) {
     console.error(
       'Usage: node src/calculator.js <number> <+|-|*|/|%|^> <number> OR node src/calculator.js <number> sqrt'
@@ -105,7 +101,7 @@ function runCli() {
       calculate(
         Number(leftInput),
         operation,
-        isSquareRootOperation ? undefined : Number(rightInput)
+        isSqrtOperation ? undefined : Number(rightInput)
       )
     );
   } catch (error) {
