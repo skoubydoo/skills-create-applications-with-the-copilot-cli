@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-// Supports addition (+), subtraction (-), multiplication (*), and division (/).
+// Supports addition (+), subtraction (-), multiplication (*), division (/), modulo (%),
+// exponentiation (^), and square root (sqrt).
 function add(left, right) {
   return left + right;
 }
@@ -21,21 +22,51 @@ function divide(left, right) {
   return left / right;
 }
 
+function modulo(left, right) {
+  if (right === 0) {
+    throw new RangeError('Cannot divide by zero.');
+  }
+
+  return left % right;
+}
+
+function power(base, exponent) {
+  return base ** exponent;
+}
+
+function squareRoot(number) {
+  if (number < 0) {
+    throw new RangeError('Cannot calculate the square root of a negative number.');
+  }
+
+  return Math.sqrt(number);
+}
+
 const operations = {
   '+': add,
   '-': subtract,
   '*': multiply,
   '/': divide,
+  '%': modulo,
+  '^': power,
 };
 
 function calculate(left, operation, right) {
-  if (!Number.isFinite(left) || !Number.isFinite(right)) {
+  if (!Number.isFinite(left)) {
+    throw new TypeError('Both operands must be valid numbers.');
+  }
+
+  if (operation === 'sqrt') {
+    return squareRoot(left);
+  }
+
+  if (!Number.isFinite(right)) {
     throw new TypeError('Both operands must be valid numbers.');
   }
 
   const calculator = operations[operation];
   if (!calculator) {
-    throw new RangeError('Operation must be one of: +, -, *, /.');
+    throw new RangeError('Operation must be one of: +, -, *, /, %, ^, sqrt.');
   }
 
   return calculator(left, right);
@@ -43,9 +74,16 @@ function calculate(left, operation, right) {
 
 function runCli() {
   const [leftInput, operation, rightInput] = process.argv.slice(2);
+  const isSquareRoot = operation === 'sqrt' && !rightInput && process.argv.length === 4;
 
-  if (!leftInput || !operation || !rightInput || process.argv.length !== 5) {
-    console.error('Usage: node src/calculator.js <number> <+|-|*|/> <number>');
+  if (
+    !leftInput
+    || !operation
+    || (!isSquareRoot && (!rightInput || process.argv.length !== 5))
+  ) {
+    console.error(
+      'Usage: node src/calculator.js <number> <+|-|*|/|%|^> <number> | <number> sqrt',
+    );
     process.exitCode = 1;
     return;
   }
@@ -66,4 +104,13 @@ if (require.main === module) {
   runCli();
 }
 
-module.exports = { add, subtract, multiply, divide, calculate };
+module.exports = {
+  add,
+  subtract,
+  multiply,
+  divide,
+  modulo,
+  power,
+  squareRoot,
+  calculate,
+};
