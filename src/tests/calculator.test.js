@@ -6,6 +6,9 @@ const {
   subtract,
   multiply,
   divide,
+  modulo,
+  power,
+  squareRoot,
   calculate,
 } = require('../calculator');
 
@@ -51,11 +54,43 @@ test('rejects division by zero', () => {
   });
 });
 
+test('calculates remainders with modulo', () => {
+  assert.equal(modulo(10, 3), 1);
+  assert.equal(modulo(-10, 3), -1);
+});
+
+test('rejects modulo by zero', () => {
+  assert.throws(() => modulo(10, 0), {
+    name: 'RangeError',
+    message: 'Cannot divide by zero.',
+  });
+});
+
+test('raises numbers to a power', () => {
+  assert.equal(power(2, 3), 8);
+  assert.equal(power(9, 0.5), 3);
+});
+
+test('calculates square roots', () => {
+  assert.equal(squareRoot(9), 3);
+  assert.equal(squareRoot(2.25), 1.5);
+});
+
+test('rejects square roots of negative numbers', () => {
+  assert.throws(() => squareRoot(-1), {
+    name: 'RangeError',
+    message: 'Cannot calculate the square root of a negative number.',
+  });
+});
+
 test('calculates each supported operation', () => {
   assert.equal(calculate(2, '+', 3), 5);
   assert.equal(calculate(10, '-', 4), 6);
   assert.equal(calculate(45, '*', 2), 90);
   assert.equal(calculate(20, '/', 5), 4);
+  assert.equal(calculate(10, '%', 3), 1);
+  assert.equal(calculate(2, '^', 3), 8);
+  assert.equal(calculate(9, 'sqrt'), 3);
 });
 
 test('rejects invalid operands and operations', () => {
@@ -63,8 +98,16 @@ test('rejects invalid operands and operations', () => {
     name: 'TypeError',
     message: 'Both operands must be valid numbers.',
   });
-  assert.throws(() => calculate(2, '^', 3), {
+  assert.throws(() => calculate(Number.NaN, 'sqrt'), {
+    name: 'TypeError',
+    message: 'The operand must be a valid number.',
+  });
+  assert.throws(() => calculate(-1, 'sqrt'), {
     name: 'RangeError',
-    message: 'Operation must be one of: +, -, *, /.',
+    message: 'Cannot calculate the square root of a negative number.',
+  });
+  assert.throws(() => calculate(2, 'unknown', 3), {
+    name: 'RangeError',
+    message: 'Operation must be one of: +, -, *, /, %, ^, sqrt.',
   });
 });
