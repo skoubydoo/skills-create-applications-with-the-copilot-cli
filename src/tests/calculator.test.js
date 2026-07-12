@@ -66,9 +66,23 @@ test('rejects modulo by zero', () => {
   });
 });
 
+test('rejects invalid modulo operands', () => {
+  assert.throws(() => modulo(Number.NaN, 2), {
+    name: 'TypeError',
+    message: 'Both operands must be valid numbers.',
+  });
+});
+
 test('raises numbers to a power', () => {
   assert.equal(power(2, 3), 8);
   assert.equal(power(9, 0.5), 3);
+});
+
+test('rejects invalid power operands', () => {
+  assert.throws(() => power(2, Number.NaN), {
+    name: 'TypeError',
+    message: 'Both operands must be valid numbers.',
+  });
 });
 
 test('calculates square roots', () => {
@@ -80,6 +94,13 @@ test('rejects square roots of negative numbers', () => {
   assert.throws(() => squareRoot(-1), {
     name: 'RangeError',
     message: 'Cannot calculate the square root of a negative number.',
+  });
+});
+
+test('rejects invalid square root operands', () => {
+  assert.throws(() => squareRoot(Number.NaN), {
+    name: 'TypeError',
+    message: 'The operand must be a valid number.',
   });
 });
 

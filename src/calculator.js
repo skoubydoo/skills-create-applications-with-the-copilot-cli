@@ -23,6 +23,10 @@ function divide(left, right) {
 }
 
 function modulo(left, right) {
+  if (!Number.isFinite(left) || !Number.isFinite(right)) {
+    throw new TypeError('Both operands must be valid numbers.');
+  }
+
   if (right === 0) {
     throw new RangeError('Cannot divide by zero.');
   }
@@ -31,10 +35,18 @@ function modulo(left, right) {
 }
 
 function power(base, exponent) {
+  if (!Number.isFinite(base) || !Number.isFinite(exponent)) {
+    throw new TypeError('Both operands must be valid numbers.');
+  }
+
   return base ** exponent;
 }
 
 function squareRoot(value) {
+  if (!Number.isFinite(value)) {
+    throw new TypeError('The operand must be a valid number.');
+  }
+
   if (value < 0) {
     throw new RangeError('Cannot calculate the square root of a negative number.');
   }
@@ -82,7 +94,7 @@ function runCli() {
     (!isSquareRootOperation && (!rightInput || process.argv.length !== 5))
   ) {
     console.error(
-      'Usage: node src/calculator.js <number> <+|-|*|/|%|^> <number> | <number> sqrt'
+      'Usage: node src/calculator.js <number> <+|-|*|/|%|^> <number> OR node src/calculator.js <number> sqrt'
     );
     process.exitCode = 1;
     return;
