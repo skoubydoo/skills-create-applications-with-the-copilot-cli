@@ -86,13 +86,11 @@ function calculate(left, operation, right) {
 
 function runCli() {
   const [leftInput, operation, rightInput] = process.argv.slice(2);
-  const isSqrtOperation = operation === 'sqrt' && process.argv.length === 4;
+  const isSqrtWithCorrectArity = operation === 'sqrt' && process.argv.length === 4;
+  const isBinaryOperationWithCorrectArity =
+    operation !== 'sqrt' && Boolean(rightInput) && process.argv.length === 5;
 
-  if (
-    !leftInput ||
-    !operation ||
-    (!isSqrtOperation && (!rightInput || process.argv.length !== 5))
-  ) {
+  if (!leftInput || !operation || (!isSqrtWithCorrectArity && !isBinaryOperationWithCorrectArity)) {
     console.error(
       'Usage: node src/calculator.js <number> <operation> [number] (operations: +, -, *, /, %, ^, sqrt)'
     );
@@ -105,7 +103,7 @@ function runCli() {
       calculate(
         Number(leftInput),
         operation,
-        isSqrtOperation ? undefined : Number(rightInput)
+        isSqrtWithCorrectArity ? undefined : Number(rightInput)
       )
     );
   } catch (error) {
